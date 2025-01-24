@@ -5,21 +5,30 @@ import helmet from 'helmet'
 import compression from 'compression'
 import morgan from 'morgan'
 
-const app = express()
+import { config } from './config'
+import { database } from './infra/database'
 
-app.use(cors())
-app.use(helmet())
-app.use(compression())
-app.use(morgan('tiny'))
+async function bootstrap(): Promise<void> {
+  const app = express()
 
-app.get('/api/hello', (_, response): void => {
-  response.json({ message: 'Hello World' })
-})
+  await database.initialize()
 
-app.all('*', (_, response): void => {
-  response.status(404).json({ message: 'Not Found' })
-})
+  app.use(cors())
+  app.use(helmet())
+  app.use(compression())
+  app.use(morgan('tiny'))
 
-app.listen(5000, () => {
-  console.log('Server is running on port 5000')
-})
+  app.get('/api/hello', (_, response): void => {
+    response.json({ message: 'Hello World' })
+  })
+
+  app.all('*', (_, response): void => {
+    response.status(404).json({ message: 'Not Found' })
+  })
+
+  app.listen(config.port, () => {
+    console.log(`Server is running on port ${config.port}`)
+  })
+}
+
+bootstrap()
