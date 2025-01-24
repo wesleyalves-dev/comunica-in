@@ -10,6 +10,7 @@ export const database = new DataSource({
   username: config.database.user,
   password: config.database.pass,
   synchronize: false,
+  migrationsRun: true,
   logging: config.database.log,
   logger: new SimpleConsoleLogger(config.database.log),
   entities: ['src/core/**/entity/*.entity.ts'],

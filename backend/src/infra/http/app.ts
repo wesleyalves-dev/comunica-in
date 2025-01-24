@@ -5,8 +5,10 @@ import helmet from 'helmet'
 import compression from 'compression'
 import morgan from 'morgan'
 
-import { config } from './config'
-import { database } from './infra/database'
+import { config } from '../../config'
+import { database } from '../../infra/database'
+import { routes } from './routes'
+import { notFound } from './middleware'
 
 async function bootstrap(): Promise<void> {
   const app = express()
@@ -17,14 +19,9 @@ async function bootstrap(): Promise<void> {
   app.use(helmet())
   app.use(compression())
   app.use(morgan('tiny'))
-
-  app.get('/api/hello', (_, response): void => {
-    response.json({ message: 'Hello World' })
-  })
-
-  app.all('*', (_, response): void => {
-    response.status(404).json({ message: 'Not Found' })
-  })
+  app.use(express.json())
+  app.use('/api', routes)
+  app.all('*', notFound)
 
   app.listen(config.port, () => {
     console.log(`Server is running on port ${config.port}`)
