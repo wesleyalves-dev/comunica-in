@@ -9,7 +9,10 @@ const config = {
   collectCoverage: true,
   coverageDirectory: 'coverage',
   coverageProvider: 'v8',
-  testMatch: ['**/*.spec.ts']
+  testMatch: ['**/*.spec.ts'],
+  transform: {
+    '^.+\\.ts$': 'ts-jest'
+  }
 }
 
 module.exports = config

@@ -11,5 +11,10 @@ export default [
   pluginJs.configs.recommended,
   eslintPluginPrettierRecommended,
   eslintConfigPrettier,
-  ...tseslint.configs.recommended
+  ...tseslint.configs.recommended,
+  {
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off'
+    }
+  }
 ]
