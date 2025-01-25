@@ -8,9 +8,13 @@ interface ListAllPeopleParams {
   page?: number
 }
 
+const TWO_SECONDS = 1000 * 2
+
 export class Swapi {
   private readonly http = axios.create({
-    baseURL: 'https://swapi.dev/api'
+    baseURL: 'https://swapi.dev/api',
+    timeout: TWO_SECONDS,
+    timeoutErrorMessage: 'Serviço externo não respondeu'
   })
   private readonly personMapper = new PersonMapper()
 
@@ -20,7 +24,7 @@ export class Swapi {
     try {
       return await fn()
     } catch (error: any) {
-      if (error.response.status === 404) {
+      if (error.response?.status === 404) {
         throw new Exception('Recurso não encontrado', 404, error.response.data)
       }
       throw error
