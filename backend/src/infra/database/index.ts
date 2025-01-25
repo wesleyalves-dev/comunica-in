@@ -13,6 +13,12 @@ export const database = new DataSource({
   migrationsRun: true,
   logging: config.database.log,
   logger: new SimpleConsoleLogger(config.database.log),
-  entities: ['src/core/**/entity/*.entity.ts'],
-  migrations: ['src/infra/database/migrations/*.ts']
+  entities:
+    config.environment === 'production'
+      ? ['dist/core/**/entity/*.entity.js']
+      : ['src/core/**/entity/*.entity.ts'],
+  migrations:
+    config.environment === 'production'
+      ? ['dist/infra/database/migrations/*.js']
+      : ['src/infra/database/migrations/*.ts']
 })
