@@ -29,21 +29,25 @@ describe('/users', () => {
   describe('GET /', () => {
     it('espera retornar um array de users', async () => {
       jest.spyOn(database.manager, 'find').mockResolvedValueOnce([user])
+      jest.spyOn(database.manager, 'count').mockResolvedValueOnce(1)
 
       const response = await request(app)
         .get('/api/users')
         .set('Cookie', cookies)
 
       expect(response.status).toBe(200)
-      expect(response.body).toEqual([
-        {
-          id: user.id,
-          name: user.name,
-          username: user.username,
-          createdAt: user.createdAt.toISOString(),
-          updatedAt: user.updatedAt.toISOString()
-        }
-      ])
+      expect(response.body).toEqual({
+        items: [
+          {
+            id: user.id,
+            name: user.name,
+            username: user.username,
+            createdAt: user.createdAt.toISOString(),
+            updatedAt: user.updatedAt.toISOString()
+          }
+        ],
+        total: 1
+      })
     })
   })
 
