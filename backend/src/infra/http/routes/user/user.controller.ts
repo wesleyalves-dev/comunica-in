@@ -5,8 +5,10 @@ import { UserService } from '../../../../core/user/service/user.service'
 export class UserController {
   private readonly userService = new UserService()
 
-  async list(_: Request, response: Response): Promise<void> {
-    const users = await this.userService.list()
+  async list(request: Request, response: Response): Promise<void> {
+    const queryPage = Number(request.query.page)
+    const page = Number.isInteger(queryPage) ? Number(queryPage) : undefined
+    const users = await this.userService.list({ page })
     response.json(users)
   }
 

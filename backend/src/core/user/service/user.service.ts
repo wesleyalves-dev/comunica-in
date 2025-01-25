@@ -1,6 +1,10 @@
 import { database } from '../../../infra/database'
 import { User, type UserOutput } from '../entity/user.entity'
 
+interface ListParams {
+  page?: number
+}
+
 interface UserCreateData {
   name: string
   username: string
@@ -14,8 +18,11 @@ interface UserUpdateData {
 }
 
 export class UserService {
-  async list(): Promise<UserOutput[]> {
-    const users = await database.manager.find(User)
+  async list(params: ListParams): Promise<UserOutput[]> {
+    const { page = 1 } = params
+    const take = 10
+    const skip = (page - 1) * take
+    const users = await database.manager.find(User, { take, skip })
     return users.map(user => user.toOutput())
   }
 
