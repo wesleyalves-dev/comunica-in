@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express'
 
 import { UserService } from '../../../../core/user/service/user.service'
+import { statusCodeByContent } from '../../../../shared/utils/http'
 
 export class UserController {
   private readonly userService = new UserService()
@@ -15,7 +16,8 @@ export class UserController {
   async get(request: Request, response: Response): Promise<void> {
     const { id } = request.params
     const user = await this.userService.get(id)
-    response.json(user)
+    const status = statusCodeByContent(user)
+    response.status(status).json(user)
   }
 
   async create(request: Request, response: Response): Promise<void> {
@@ -28,7 +30,8 @@ export class UserController {
     const { id } = request.params
     const { name, username, password } = request.body
     const user = await this.userService.update(id, { name, username, password })
-    response.json(user)
+    const status = statusCodeByContent(user)
+    response.status(status).json(user)
   }
 
   async delete(request: Request, response: Response): Promise<void> {
