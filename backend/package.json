@@ -1,10 +1,11 @@
 {
-  "name": "comunica-in",
+  "name": "@comunica-in/backend",
   "version": "0.0.0",
   "main": "src/index",
   "repository": "https://github.com/wesleyalves-dev/comunica-in.git",
   "author": "Wesley Alves",
   "license": "MIT",
+  "private": true,
   "scripts": {
     "test": "jest",
     "dev": "tsnd --rs --respawn --transpile-only src/index",
