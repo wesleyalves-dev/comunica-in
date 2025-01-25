@@ -1,9 +1,11 @@
 import request from 'supertest'
 import type { Express } from 'express'
+import jwt from 'jsonwebtoken'
 
 import { User } from '../../../../core/user/entity/user.entity'
 import { database } from '../../../database'
 import { bootstrap } from '../../app'
+import { config } from '../../../../config'
 
 describe('/users', () => {
   let app: Express
@@ -14,11 +16,13 @@ describe('/users', () => {
   user.password = 'password'
   user.createdAt = new Date()
   user.updatedAt = new Date()
+  const cookies = [`${config.token.cookie}=fake-token`]
 
   beforeAll(async () => {
     jest
       .spyOn(database, 'initialize')
       .mockImplementation(async () => ({}) as any)
+    jest.spyOn(jwt, 'verify').mockReturnValue()
     app = await bootstrap()
   })
 
@@ -26,7 +30,9 @@ describe('/users', () => {
     it('espera retornar um array de users', async () => {
       jest.spyOn(database.manager, 'find').mockResolvedValueOnce([user])
 
-      const response = await request(app).get('/api/users')
+      const response = await request(app)
+        .get('/api/users')
+        .set('Cookie', cookies)
 
       expect(response.status).toBe(200)
       expect(response.body).toEqual([
@@ -45,7 +51,9 @@ describe('/users', () => {
     it('espera retornar um objeto de user', async () => {
       jest.spyOn(database.manager, 'findOne').mockResolvedValueOnce(user)
 
-      const response = await request(app).get(`/api/users/${user.id}`)
+      const response = await request(app)
+        .get(`/api/users/${user.id}`)
+        .set('Cookie', cookies)
 
       expect(response.status).toBe(200)
       expect(response.body).toEqual({
@@ -68,7 +76,10 @@ describe('/users', () => {
         password: 'HardP4ssw0rd'
       }
 
-      const response = await request(app).post('/api/users').send(body)
+      const response = await request(app)
+        .post('/api/users')
+        .set('Cookie', cookies)
+        .send(body)
 
       expect(response.status).toBe(201)
       expect(response.body).toEqual({
@@ -94,6 +105,7 @@ describe('/users', () => {
 
       const response = await request(app)
         .put(`/api/users/${user.id}`)
+        .set('Cookie', cookies)
         .send(body)
 
       expect(response.status).toBe(200)
@@ -113,7 +125,9 @@ describe('/users', () => {
         .spyOn(database.manager, 'delete')
         .mockResolvedValueOnce({ raw: '' })
 
-      const response = await request(app).delete(`/api/users/${user.id}`)
+      const response = await request(app)
+        .delete(`/api/users/${user.id}`)
+        .set('Cookie', cookies)
 
       expect(response.status).toBe(204)
       expect(deleteSpy).toHaveBeenCalled()
