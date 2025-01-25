@@ -1,4 +1,6 @@
-import { UserTableRow } from "./components";
+"use client";
+import { showModal } from "@/components/modal";
+import { UserTableRow, CreateUserModal } from "./components";
 
 export default function Usuarios() {
   const users = [
@@ -19,7 +21,10 @@ export default function Usuarios() {
         <div className="dui-card-body">
           <div>
             <h1 className="inline">Usuários</h1>
-            <button className="dui-btn dui-btn-sm float-end dui-btn-primary">
+            <button
+              className="dui-btn dui-btn-sm float-end dui-btn-primary"
+              onClick={() => showModal("create-user-modal")}
+            >
               Cadastrar
             </button>
           </div>
@@ -41,6 +46,8 @@ export default function Usuarios() {
           </table>
         </div>
       </div>
+
+      <CreateUserModal />
     </div>
   );
 }
