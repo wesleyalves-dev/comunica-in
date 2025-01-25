@@ -27,7 +27,11 @@ export class UserService {
     const { page = 1 } = params
     const take = 10
     const skip = (page - 1) * take
-    const users = await database.manager.find(User, { take, skip })
+    const users = await database.manager.find(User, {
+      take,
+      skip,
+      order: { username: 1 }
+    })
     const total = await database.manager.count(User)
     return {
       items: users.map(user => user.toOutput()),

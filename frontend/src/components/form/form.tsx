@@ -1,11 +1,11 @@
 import { FormProvider, useForm } from "react-hook-form";
-import type { ZodObject } from "zod";
+import type { ZodEffects, ZodObject } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 interface FormProps {
   children?: React.ReactNode;
-  schema?: ZodObject<any>;
-  onSubmit: <FormValues>(data: FormValues) => void;
+  schema?: ZodObject<any> | ZodEffects<any>;
+  onSubmit: (data: any) => void;
 }
 
 export function Form({ children, schema, onSubmit }: FormProps) {

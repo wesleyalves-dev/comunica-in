@@ -27,6 +27,12 @@ export interface ListUsersOutput {
   total: number;
 }
 
+export interface CreateUserInput {
+  name: string;
+  username: string;
+  password: string;
+}
+
 function formatUser(raw: UserRaw): User {
   return {
     ...raw,
@@ -50,5 +56,10 @@ export class UserService {
       items: items.map(formatUser),
       total,
     };
+  }
+
+  async create(input: CreateUserInput): Promise<User> {
+    const response = await api.post<UserRaw>("/users", input);
+    return formatUser(response.data);
   }
 }
