@@ -3,27 +3,14 @@ import { useState } from "react";
 
 import { showModal } from "@/components/modal";
 import type { SwPerson } from "@/services/sw-person";
+import { useListSwPeople } from "@/hooks/use-list-sw-people";
+import { Loader } from "@/components/loader";
 import { SwPersonTableRow, ViewSwPersonModal } from "./components";
 
 export default function StarWars() {
   const [selectedPerson, setSelectedPerson] = useState<SwPerson>();
-
-  const people: SwPerson[] = [
-    {
-      name: "Luke Skywalker",
-      birthYear: "19BBY",
-      eyeColor: "blue",
-      gender: "male",
-      hairColor: "blond",
-      height: "172",
-      mass: "77",
-      skinColor: "fair",
-      created: "2014-12-09T13:50:51.644Z",
-      edited: "2014-12-20T21:17:56.891Z",
-      createdFormatted: "2014-12-09",
-      editedFormatted: "2014-12-20",
-    },
-  ];
+  const { data, isLoading } = useListSwPeople();
+  const people = data?.results ?? [];
 
   function handleViewPersonClick(person: SwPerson) {
     setSelectedPerson(person);
@@ -32,6 +19,7 @@ export default function StarWars() {
 
   return (
     <div>
+      <Loader active={isLoading} />
       <div className="dui-card shadow-md">
         <div className="dui-card-body">
           <div>
