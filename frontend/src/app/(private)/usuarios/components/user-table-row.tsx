@@ -4,9 +4,23 @@ import type { User } from "@/services/user";
 
 interface UserTableRow {
   user: User;
+  onUpdateClick: (user: User) => void;
+  onDeleteClick: (user: User) => void;
 }
 
-export function UserTableRow({ user }: UserTableRow) {
+export function UserTableRow({
+  user,
+  onUpdateClick,
+  onDeleteClick,
+}: UserTableRow) {
+  function handleUpdateClick() {
+    onUpdateClick(user);
+  }
+
+  function handleDeleteClick() {
+    onDeleteClick(user);
+  }
+
   return (
     <tr>
       <td>{user.name}</td>
@@ -15,12 +29,12 @@ export function UserTableRow({ user }: UserTableRow) {
       <td>{user.updatedAtFormatted}</td>
       <td className="flex flex-row gap-4">
         <div className="dui-tooltip" data-tip="Editar">
-          <button>
+          <button onClick={handleUpdateClick}>
             <FaPen />
           </button>
         </div>
         <div className="dui-tooltip" data-tip="Excluir">
-          <button>
+          <button onClick={handleDeleteClick}>
             <FaTrash />
           </button>
         </div>

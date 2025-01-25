@@ -1,8 +1,13 @@
 "use client";
+import { useState } from "react";
+
 import { showModal } from "@/components/modal";
-import { UserTableRow, CreateUserModal } from "./components";
+import type { User } from "@/services/user";
+import { UserTableRow, CreateUserModal, UpdateUserModal } from "./components";
 
 export default function Usuarios() {
+  const [selectedUser, setSelectedUser] = useState<User>();
+
   const users = [
     {
       id: "1",
@@ -14,6 +19,16 @@ export default function Usuarios() {
       updatedAtFormatted: "2022-01-01",
     },
   ];
+
+  function handleUpdateUserClick(user: User) {
+    setSelectedUser(user);
+    showModal("update-user-modal");
+  }
+
+  function handleDeleteUserClick(user: User) {
+    setSelectedUser(user);
+    showModal("delete-user-modal");
+  }
 
   return (
     <div>
@@ -40,7 +55,12 @@ export default function Usuarios() {
             </thead>
             <tbody>
               {users.map((user) => (
-                <UserTableRow key={user.id} user={user} />
+                <UserTableRow
+                  key={user.id}
+                  user={user}
+                  onUpdateClick={handleUpdateUserClick}
+                  onDeleteClick={handleDeleteUserClick}
+                />
               ))}
             </tbody>
           </table>
@@ -48,6 +68,7 @@ export default function Usuarios() {
       </div>
 
       <CreateUserModal />
+      <UpdateUserModal user={selectedUser} />
     </div>
   );
 }
