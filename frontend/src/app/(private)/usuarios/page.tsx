@@ -31,11 +31,6 @@ export default function Usuarios() {
     showModal("view-user-modal");
   }
 
-  function handleCreateUserClick(user: User) {
-    setSelectedUser(user);
-    showModal("create-user-modal");
-  }
-
   function handleUpdateUserClick(user: User) {
     setSelectedUser(user);
     showModal("update-user-modal");
