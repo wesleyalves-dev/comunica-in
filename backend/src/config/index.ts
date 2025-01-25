@@ -2,7 +2,8 @@ export const config = {
   environment: process.env.NODE_ENV || 'development',
   port: process.env.PORT || 5000,
   cors: {
-    origin: '*'
+    origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+    credentials: true
   },
   database: {
     host: process.env.DB_HOST || 'localhost',
