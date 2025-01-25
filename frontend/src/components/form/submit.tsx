@@ -4,8 +4,10 @@ interface SubmitProps {
 
 export function Submit({ label }: SubmitProps) {
   return (
-    <button type="submit" className="dui-btn dui-btn-primary">
-      {label}
-    </button>
+    <div>
+      <button type="submit" className="dui-btn dui-btn-primary float-end">
+        {label}
+      </button>
+    </div>
   );
 }
