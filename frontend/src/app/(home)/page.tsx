@@ -1,12 +1,20 @@
 "use client";
 import { redirect } from "next/navigation";
+import { toast } from "react-toastify";
 
 import { Form, TextInput, Password, Submit } from "@/components/form";
+import { useSignIn } from "@/hooks/use-sign-in";
 
 export default function Home() {
-  function handleSubmit(event: any) {
-    event.preventDefault();
-    redirect("/usuarios");
+  const signIn = useSignIn({
+    onSuccess: () => redirect("/usuarios"),
+    onError: (error: any) =>
+      toast.error(error.response?.data.message || "Erro ao efetuar login"),
+  });
+
+  function handleSubmit(values: any) {
+    const { username, password } = values;
+    signIn.mutate({ username, password });
   }
 
   return (
@@ -20,7 +28,11 @@ export default function Home() {
           <Form onSubmit={handleSubmit}>
             <TextInput name="username" placeholder="Usuário" />
             <Password name="password" placeholder="Senha" />
-            <Submit label="Entrar" />
+            <Submit
+              label="Entrar"
+              loading={signIn.isPending}
+              disabled={signIn.isPending}
+            />
           </Form>
         </div>
       </div>
