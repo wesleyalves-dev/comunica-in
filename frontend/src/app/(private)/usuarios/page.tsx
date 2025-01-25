@@ -3,7 +3,12 @@ import { useState } from "react";
 
 import { showModal } from "@/components/modal";
 import type { User } from "@/services/user";
-import { UserTableRow, CreateUserModal, UpdateUserModal } from "./components";
+import {
+  UserTableRow,
+  CreateUserModal,
+  UpdateUserModal,
+  DeleteUserModal,
+} from "./components";
 
 export default function Usuarios() {
   const [selectedUser, setSelectedUser] = useState<User>();
@@ -69,6 +74,7 @@ export default function Usuarios() {
 
       <CreateUserModal />
       <UpdateUserModal user={selectedUser} />
+      <DeleteUserModal user={selectedUser} />
     </div>
   );
 }
