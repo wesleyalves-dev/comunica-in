@@ -7,6 +7,7 @@ export default {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {},
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   plugins: [require("daisyui")],
   daisyui: {
     prefix: "dui-",

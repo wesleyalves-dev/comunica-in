@@ -1,6 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import { z } from "zod";
 
 import { Form, TextInput, Password, Submit } from "@/components/form";
 import { useSignIn } from "@/hooks/use-sign-in";
@@ -14,7 +15,7 @@ export default function Home() {
       toast.error(error.response?.data.message || "Erro ao efetuar login"),
   });
 
-  function handleSubmit(values: any) {
+  function handleSubmit(values: z.infer<typeof signInSchema>) {
     const { username, password } = values;
     signIn.mutate({ username, password });
   }
