@@ -7,7 +7,7 @@ import {
 } from 'typeorm'
 import { randomUUID } from 'node:crypto'
 
-import { hash } from '../../../shared/utils/password'
+import { compare, hash } from '../../../shared/utils/password'
 import { validateCreation, validateUpdate } from './user.validation'
 
 export interface UserOutput {
@@ -56,6 +56,10 @@ export class User {
     this.password = validated.password
       ? hash(validated.password)
       : this.password
+  }
+
+  verifyPassword(value: string): boolean {
+    return compare(value, this.password)
   }
 
   toOutput(): UserOutput {

@@ -4,6 +4,7 @@ import cors from 'cors'
 import helmet from 'helmet'
 import compression from 'compression'
 import morgan from 'morgan'
+import cookies from 'cookie-parser'
 import 'express-async-errors'
 
 import { database } from '../../infra/database'
@@ -20,6 +21,7 @@ export async function bootstrap(): Promise<Express> {
   app.use(compression())
   app.use(morgan('tiny'))
   app.use(express.json())
+  app.use(cookies())
   app.use('/api', routes)
   app.all('*', notFound)
   app.use(errorHandler)
