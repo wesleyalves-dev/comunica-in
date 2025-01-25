@@ -1,8 +1,9 @@
 "use client";
 import { useState } from "react";
 
+import { showModal } from "@/components/modal";
 import type { SwPerson } from "@/services/sw-person";
-import { SwPersonTableRow } from "./components";
+import { SwPersonTableRow, ViewSwPersonModal } from "./components";
 
 export default function StarWars() {
   const [selectedPerson, setSelectedPerson] = useState<SwPerson>();
@@ -23,6 +24,11 @@ export default function StarWars() {
       editedFormatted: "2014-12-20",
     },
   ];
+
+  function handleViewPersonClick(person: SwPerson) {
+    setSelectedPerson(person);
+    showModal("view-person-modal");
+  }
 
   return (
     <div>
@@ -46,13 +52,15 @@ export default function StarWars() {
                 <SwPersonTableRow
                   key={person.name}
                   person={person}
-                  onViewClick={setSelectedPerson}
+                  onViewClick={handleViewPersonClick}
                 />
               ))}
             </tbody>
           </table>
         </div>
       </div>
+
+      <ViewSwPersonModal person={selectedPerson} />
     </div>
   );
 }
