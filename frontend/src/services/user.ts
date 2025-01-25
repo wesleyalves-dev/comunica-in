@@ -73,4 +73,8 @@ export class UserService {
     const response = await api.put<UserRaw>(`/users/${id}`, input);
     return formatUser(response.data);
   }
+
+  async delete(id: string): Promise<void> {
+    await api.delete(`/users/${id}`);
+  }
 }
