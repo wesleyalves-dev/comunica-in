@@ -8,6 +8,7 @@ export function auth(request: Request, response: Response, next: NextFunction) {
 
   if (!token) {
     response.status(401).json({ message: 'É necessário fazer login' })
+    return
   }
 
   try {
