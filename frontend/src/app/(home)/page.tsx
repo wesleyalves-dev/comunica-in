@@ -1,13 +1,15 @@
 "use client";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
 import { Form, TextInput, Password, Submit } from "@/components/form";
 import { useSignIn } from "@/hooks/use-sign-in";
+import { signInSchema } from "./schemas";
 
 export default function Home() {
+  const router = useRouter();
   const signIn = useSignIn({
-    onSuccess: () => redirect("/usuarios"),
+    onSuccess: () => router.push("/usuarios"),
     onError: (error: any) =>
       toast.error(error.response?.data.message || "Erro ao efetuar login"),
   });
@@ -25,7 +27,7 @@ export default function Home() {
             Login
           </h1>
 
-          <Form onSubmit={handleSubmit}>
+          <Form schema={signInSchema} onSubmit={handleSubmit}>
             <TextInput name="username" placeholder="Usuário" />
             <Password name="password" placeholder="Senha" />
             <Submit
