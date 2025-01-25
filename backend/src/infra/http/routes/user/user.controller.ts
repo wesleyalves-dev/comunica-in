@@ -8,8 +8,8 @@ export class UserController {
   async list(request: Request, response: Response): Promise<void> {
     const queryPage = Number(request.query.page)
     const page = Number.isInteger(queryPage) ? Number(queryPage) : undefined
-    const users = await this.userService.list({ page })
-    response.json(users)
+    const output = await this.userService.list({ page })
+    response.json(output)
   }
 
   async get(request: Request, response: Response): Promise<void> {

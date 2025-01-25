@@ -5,6 +5,11 @@ interface ListParams {
   page?: number
 }
 
+interface ListOutput {
+  items: UserOutput[]
+  total: number
+}
+
 interface UserCreateData {
   name: string
   username: string
@@ -18,12 +23,16 @@ interface UserUpdateData {
 }
 
 export class UserService {
-  async list(params: ListParams): Promise<UserOutput[]> {
+  async list(params: ListParams): Promise<ListOutput> {
     const { page = 1 } = params
     const take = 10
     const skip = (page - 1) * take
     const users = await database.manager.find(User, { take, skip })
-    return users.map(user => user.toOutput())
+    const total = await database.manager.count(User)
+    return {
+      items: users.map(user => user.toOutput()),
+      total
+    }
   }
 
   async get(id: string): Promise<UserOutput | undefined> {
