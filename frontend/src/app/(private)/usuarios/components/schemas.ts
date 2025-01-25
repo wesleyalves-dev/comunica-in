@@ -2,6 +2,8 @@ import z from "zod";
 
 const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
 
+const UPDATE_PASSWORD_REGEX = /^(?:|(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,})$/;
+
 const messages = {
   name: {
     required: "Nome é obrigatório",
@@ -37,6 +39,29 @@ export const createUserSchema = z
     passwordConfirmation: z.string({
       required_error: messages.passwordConfirmation.required,
     }),
+  })
+  .refine((data) => data.password === data.passwordConfirmation, {
+    message: messages.passwordConfirmation.match,
+    path: ["passwordConfirmation"],
+  });
+
+export const updateUserSchema = z
+  .object({
+    name: z.string().min(1, { message: messages.name.min }).optional(),
+    username: z
+      .string()
+      .min(1, { message: messages.username.min })
+      .toLowerCase()
+      .optional(),
+    password: z
+      .string()
+      .regex(UPDATE_PASSWORD_REGEX, { message: messages.password.regex })
+      .optional(),
+    passwordConfirmation: z
+      .string({
+        required_error: messages.passwordConfirmation.required,
+      })
+      .optional(),
   })
   .refine((data) => data.password === data.passwordConfirmation, {
     message: messages.passwordConfirmation.match,

@@ -33,6 +33,12 @@ export interface CreateUserInput {
   password: string;
 }
 
+export interface UpdateUserInput {
+  name?: string;
+  username?: string;
+  password?: string;
+}
+
 function formatUser(raw: UserRaw): User {
   return {
     ...raw,
@@ -60,6 +66,11 @@ export class UserService {
 
   async create(input: CreateUserInput): Promise<User> {
     const response = await api.post<UserRaw>("/users", input);
+    return formatUser(response.data);
+  }
+
+  async update(id: string, input: UpdateUserInput): Promise<User> {
+    const response = await api.put<UserRaw>(`/users/${id}`, input);
     return formatUser(response.data);
   }
 }

@@ -8,7 +8,10 @@ import { createUserSchema } from "./schemas";
 
 export function CreateUserModal() {
   const { mutate: createUser, isPending } = useCreateUser({
-    onSuccess: () => closeModal("create-user-modal"),
+    onSuccess: () => {
+      toast.success("Usuário cadastrado com sucesso");
+      closeModal("create-user-modal");
+    },
     onError: (error: any) =>
       toast.error(error.response?.data.message || "Erro ao efetuar cadastro"),
   });
