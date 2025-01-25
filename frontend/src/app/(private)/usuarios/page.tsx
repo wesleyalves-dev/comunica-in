@@ -5,6 +5,7 @@ import { showModal } from "@/components/modal";
 import type { User } from "@/services/user";
 import {
   UserTableRow,
+  ViewUserModal,
   CreateUserModal,
   UpdateUserModal,
   DeleteUserModal,
@@ -24,6 +25,16 @@ export default function Usuarios() {
       updatedAtFormatted: "2022-01-01",
     },
   ];
+
+  function handleViewUserClick(user: User) {
+    setSelectedUser(user);
+    showModal("view-user-modal");
+  }
+
+  function handleCreateUserClick(user: User) {
+    setSelectedUser(user);
+    showModal("create-user-modal");
+  }
 
   function handleUpdateUserClick(user: User) {
     setSelectedUser(user);
@@ -63,6 +74,7 @@ export default function Usuarios() {
                 <UserTableRow
                   key={user.id}
                   user={user}
+                  onViewClick={handleViewUserClick}
                   onUpdateClick={handleUpdateUserClick}
                   onDeleteClick={handleDeleteUserClick}
                 />
@@ -72,6 +84,7 @@ export default function Usuarios() {
         </div>
       </div>
 
+      <ViewUserModal user={selectedUser} />
       <CreateUserModal />
       <UpdateUserModal user={selectedUser} />
       <DeleteUserModal user={selectedUser} />
