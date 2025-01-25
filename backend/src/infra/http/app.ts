@@ -8,6 +8,7 @@ import cookies from 'cookie-parser'
 import 'express-async-errors'
 
 import { database } from '../../infra/database'
+import { config } from '../../config'
 import { routes } from './routes'
 import { notFound, errorHandler } from './middleware'
 
@@ -16,7 +17,7 @@ export async function bootstrap(): Promise<Express> {
 
   await database.initialize()
 
-  app.use(cors())
+  app.use(cors(config.cors))
   app.use(helmet())
   app.use(compression())
   app.use(morgan('tiny'))
