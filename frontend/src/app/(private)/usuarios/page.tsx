@@ -5,6 +5,7 @@ import { showModal } from "@/components/modal";
 import type { User } from "@/services/user";
 import { useListUsers } from "@/hooks/use-list-users";
 import { Loader } from "@/components/loader";
+import { Pagination } from "@/components/pagination";
 import {
   UserTableRow,
   ViewUserModal,
@@ -15,7 +16,8 @@ import {
 
 export default function Usuarios() {
   const [selectedUser, setSelectedUser] = useState<User>();
-  const { data, isLoading } = useListUsers();
+  const [page, setPage] = useState(1);
+  const { data, isLoading } = useListUsers({ page });
   const users = data?.items ?? [];
 
   function handleViewUserClick(user: User) {
@@ -68,6 +70,18 @@ export default function Usuarios() {
                 />
               ))}
             </tbody>
+            <tfoot>
+              <tr>
+                <td colSpan={5} className="text-center">
+                  <Pagination
+                    page={page}
+                    total={data?.total ?? 0}
+                    limit={10}
+                    onPageChange={setPage}
+                  />
+                </td>
+              </tr>
+            </tfoot>
           </table>
         </div>
       </div>
