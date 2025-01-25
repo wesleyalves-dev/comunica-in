@@ -14,6 +14,8 @@ export function errorHandler(
     response.status(status).json({ message, details })
   } else {
     const { message } = error
-    response.status(500).json({ message })
+    response
+      .status(500)
+      .json({ message: 'Erro interno do serviço', original: message })
   }
 }
