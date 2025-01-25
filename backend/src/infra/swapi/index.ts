@@ -1,0 +1,1 @@
+export { Swapi } from './swapi'
