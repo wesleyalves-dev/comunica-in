@@ -3,6 +3,8 @@ import { useState } from "react";
 
 import { showModal } from "@/components/modal";
 import type { User } from "@/services/user";
+import { useListUsers } from "@/hooks/use-list-users";
+import { Loader } from "@/components/loader";
 import {
   UserTableRow,
   ViewUserModal,
@@ -13,18 +15,8 @@ import {
 
 export default function Usuarios() {
   const [selectedUser, setSelectedUser] = useState<User>();
-
-  const users = [
-    {
-      id: "1",
-      name: "John Doe",
-      username: "john.doe",
-      createdAt: new Date("2022-01-01").toISOString(),
-      updatedAt: new Date("2022-01-01").toISOString(),
-      createdAtFormatted: "2022-01-01",
-      updatedAtFormatted: "2022-01-01",
-    },
-  ];
+  const { data, isLoading } = useListUsers();
+  const users = data?.items ?? [];
 
   function handleViewUserClick(user: User) {
     setSelectedUser(user);
@@ -43,6 +35,7 @@ export default function Usuarios() {
 
   return (
     <div>
+      <Loader active={isLoading} />
       <div className="dui-card shadow-md">
         <div className="dui-card-body">
           <div>
