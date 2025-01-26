@@ -11,7 +11,6 @@ api.interceptors.response.use(
     const { response } = error;
 
     if (response.status === 401 && window.location.pathname !== "/") {
-      console.log({ href: window.location });
       window.location.href = "/";
     }
 
