@@ -3,6 +3,7 @@ import axios from 'axios'
 import { Exception } from '../../shared/exception'
 import type { ListResponse, Person, PersonOutput } from './interfaces'
 import { PersonMapper } from './person.mapper'
+import { MESSAGES_BY_STATUS } from './constants'
 
 interface ListAllPeopleParams {
   page?: number
@@ -24,8 +25,11 @@ export class Swapi {
     try {
       return await fn()
     } catch (error: any) {
-      if (error.response?.status === 404) {
-        throw new Exception('Recurso não encontrado', 404, error.response.data)
+      if (error.response?.status) {
+        const message =
+          MESSAGES_BY_STATUS.get(String(error.response?.status)) ??
+          'Não foi possível concluir a consulta'
+        throw new Exception(message, error.response.status, error.response.data)
       }
       throw error
     }

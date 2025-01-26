@@ -10,9 +10,8 @@ api.interceptors.response.use(
   (error) => {
     const { response } = error;
 
-    if (response.status === 401) {
+    if (response.status === 401 && window.location.pathname !== "/") {
       window.location.href = "/";
-      return;
     }
 
     return Promise.reject(error);

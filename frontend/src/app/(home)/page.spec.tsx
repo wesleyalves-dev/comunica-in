@@ -30,7 +30,7 @@ describe("Login", () => {
 
     expect(screen.getByPlaceholderText("Usuário")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("Senha")).toBeInTheDocument();
-    expect(screen.getByRole("button")).toBeInTheDocument();
+    expect(screen.getByText("Entrar")).toBeInTheDocument();
   });
 
   it("espera mostrar mensagens de erro do formulário", async () => {
@@ -60,7 +60,7 @@ describe("Login", () => {
       fireEvent.change(screen.getByPlaceholderText("Senha"), {
         target: { value: "invalid-password" },
       });
-      fireEvent.click(screen.getByRole("button"));
+      fireEvent.click(screen.getByText("Entrar"));
     });
 
     await waitFor(() => {
@@ -83,7 +83,7 @@ describe("Login", () => {
       fireEvent.change(screen.getByPlaceholderText("Senha"), {
         target: { value: "valid-password" },
       });
-      fireEvent.click(screen.getByRole("button"));
+      fireEvent.click(screen.getByText("Entrar"));
     });
 
     await waitFor(() => {
