@@ -86,7 +86,7 @@ export default function Usuarios() {
         </div>
       </div>
 
-      <ViewUserModal user={selectedUser} />
+      <ViewUserModal id={selectedUser?.id} />
       <CreateUserModal />
       <UpdateUserModal user={selectedUser} />
       <DeleteUserModal user={selectedUser} />
