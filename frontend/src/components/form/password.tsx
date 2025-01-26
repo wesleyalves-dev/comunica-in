@@ -19,14 +19,14 @@ export function Password({ name, placeholder }: TextInputProps) {
 
   return (
     <div>
-      <label className="dui-input dui-input-bordered grid grid-cols-7 items-center justify-between gap-2">
+      <label className="dui-input dui-input-bordered flex items-center justify-between gap-2">
         <input
-          className="col-span-6"
+          className="flex-auto"
           placeholder={placeholder}
           type={type}
           {...register(name)}
         />
-        <button className="col-span-1" type="button" onClick={togglePassword}>
+        <button type="button" onClick={togglePassword}>
           <span className="select-none">
             {type === "password" ? "Mostrar" : "Ocultar"}
           </span>
