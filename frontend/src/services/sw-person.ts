@@ -22,26 +22,11 @@ export interface ListSwPeopleParams {
   page?: number;
 }
 
-export interface ListSwPeopleRawOutput {
+export interface ListSwPeopleOutput<Type> {
   count: number;
   next: string | null;
   previous: string | null;
-  results: SwPersonRaw[];
-}
-
-export interface ListSwPeopleOutput {
-  count: number;
-  next: string | null;
-  previous: string | null;
-  results: SwPerson[];
-}
-
-function formatSwPerson(raw: SwPersonRaw): SwPerson {
-  return {
-    ...raw,
-    createdFormatted: new Date(raw.created).toLocaleString(),
-    editedFormatted: new Date(raw.edited).toLocaleString(),
-  };
+  results: Type[];
 }
 
 export class SwPersonService {
@@ -49,17 +34,28 @@ export class SwPersonService {
     return new SwPersonService();
   }
 
-  async list(params: ListSwPeopleParams): Promise<ListSwPeopleOutput> {
+  private formatSwPerson(raw: SwPersonRaw): SwPerson {
+    return {
+      ...raw,
+      createdFormatted: new Date(raw.created).toLocaleString(),
+      editedFormatted: new Date(raw.edited).toLocaleString(),
+    };
+  }
+
+  async list(
+    params: ListSwPeopleParams
+  ): Promise<ListSwPeopleOutput<SwPerson>> {
     const { page = 1 } = params;
-    const response = await api.get<ListSwPeopleRawOutput>(`/swapi/people`, {
-      params: { page },
-    });
+    const response = await api.get<ListSwPeopleOutput<SwPersonRaw>>(
+      `/swapi/people`,
+      { params: { page } }
+    );
     const { count, next, previous, results } = response.data;
     return {
       count,
       next,
       previous,
-      results: results.map(formatSwPerson),
+      results: results.map(this.formatSwPerson),
     };
   }
 }

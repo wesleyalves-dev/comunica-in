@@ -1,13 +1,12 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ToastContainer } from "react-toastify";
 import { act } from "react";
 
-jest.mock("react-toastify", () => ({ toast: { error: jest.fn() } }));
 jest.mock("next/navigation", () => ({ useRouter: jest.fn() }));
 jest.mock("../../hooks/use-sign-in", () => ({
   useSignIn: jest.fn(() => ({ mutate: jest.fn() })),
 }));
-import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { useSignIn } from "@/hooks/use-sign-in";
 
@@ -15,16 +14,19 @@ import Page from "./page";
 
 const createQueryClient = () => new QueryClient();
 
-export function renderWithQueryClient(ui: React.ReactElement) {
+export function renderWithProviders(ui: React.ReactElement) {
   const queryClient = createQueryClient();
   return render(
-    <QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+      <ToastContainer />
+      {ui}
+    </QueryClientProvider>
   );
 }
 
 describe("Login", () => {
   it("espera renderizar o formulário de login", () => {
-    renderWithQueryClient(<Page />);
+    renderWithProviders(<Page />);
 
     expect(screen.getByPlaceholderText("Usuário")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("Senha")).toBeInTheDocument();
@@ -32,7 +34,7 @@ describe("Login", () => {
   });
 
   it("espera mostrar mensagens de erro do formulário", async () => {
-    renderWithQueryClient(<Page />);
+    renderWithProviders(<Page />);
 
     act(() => {
       fireEvent.blur(screen.getByPlaceholderText("Usuário"));
@@ -49,7 +51,7 @@ describe("Login", () => {
     (useSignIn as jest.Mock).mockImplementationOnce(({ onError }: any) => ({
       mutate: () => onError(new Error()),
     }));
-    renderWithQueryClient(<Page />);
+    renderWithProviders(<Page />);
 
     act(() => {
       fireEvent.change(screen.getByPlaceholderText("Usuário"), {
@@ -62,7 +64,7 @@ describe("Login", () => {
     });
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith("Erro ao efetuar login");
+      expect(screen.getByText("Erro ao efetuar login")).toBeInTheDocument();
     });
   });
 
@@ -72,7 +74,7 @@ describe("Login", () => {
     }));
     const push = jest.fn();
     (useRouter as jest.Mock).mockImplementation(() => ({ push }));
-    renderWithQueryClient(<Page />);
+    renderWithProviders(<Page />);
 
     act(() => {
       fireEvent.change(screen.getByPlaceholderText("Usuário"), {

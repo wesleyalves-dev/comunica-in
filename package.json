@@ -1,0 +1,17 @@
+{
+  "name": "comunica-in",
+  "version": "0.0.0",
+  "repository": "https://github.com/wesleyalves-dev/comunica-in.git",
+  "author": "Wesley Alves",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  }
+}

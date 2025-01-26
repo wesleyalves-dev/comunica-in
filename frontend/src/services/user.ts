@@ -17,13 +17,8 @@ export interface ListUsersParams {
   page?: number;
 }
 
-export interface ListUsersRawOutput {
-  items: UserRaw[];
-  total: number;
-}
-
-export interface ListUsersOutput {
-  items: User[];
+export interface ListUsersOutput<Type> {
+  items: Type[];
   total: number;
 }
 
@@ -39,39 +34,44 @@ export interface UpdateUserInput {
   password?: string;
 }
 
-function formatUser(raw: UserRaw): User {
-  return {
-    ...raw,
-    createdAtFormatted: new Date(raw.createdAt).toLocaleString(),
-    updatedAtFormatted: new Date(raw.updatedAt).toLocaleString(),
-  };
-}
-
 export class UserService {
   static build(): UserService {
     return new UserService();
   }
 
-  async list(params: ListUsersParams): Promise<ListUsersOutput> {
+  private formatUser(raw: UserRaw): User {
+    return {
+      ...raw,
+      createdAtFormatted: new Date(raw.createdAt).toLocaleString(),
+      updatedAtFormatted: new Date(raw.updatedAt).toLocaleString(),
+    };
+  }
+
+  async list(params: ListUsersParams): Promise<ListUsersOutput<User>> {
     const { page = 1 } = params;
-    const response = await api.get<ListUsersRawOutput>(`/users`, {
+    const response = await api.get<ListUsersOutput<UserRaw>>(`/users`, {
       params: { page },
     });
     const { items, total } = response.data;
     return {
-      items: items.map(formatUser),
+      items: items.map(this.formatUser),
       total,
     };
   }
 
+  async get(id: string): Promise<User> {
+    const response = await api.get<UserRaw>(`/users/${id}`);
+    return this.formatUser(response.data);
+  }
+
   async create(input: CreateUserInput): Promise<User> {
     const response = await api.post<UserRaw>("/users", input);
-    return formatUser(response.data);
+    return this.formatUser(response.data);
   }
 
   async update(id: string, input: UpdateUserInput): Promise<User> {
     const response = await api.put<UserRaw>(`/users/${id}`, input);
-    return formatUser(response.data);
+    return this.formatUser(response.data);
   }
 
   async delete(id: string): Promise<void> {

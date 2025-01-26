@@ -29,7 +29,7 @@ export function Pagination({
         «
       </button>
       <div className="dui-join-item flex px-2 items-center justify-center bg-gray-100">
-        <span>Página {page}</span>
+        <span className="select-none">Página {page}</span>
       </div>
       <button
         className="dui-join-item dui-btn"
