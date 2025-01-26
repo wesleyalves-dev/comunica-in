@@ -1,7 +1,13 @@
 import { z } from "zod";
 import { toast } from "react-toastify";
 
-import { Form, TextInput, Password, Submit } from "@/components/form";
+import {
+  Form,
+  TextInput,
+  Password,
+  Submit,
+  type FormOnSubmitOptions,
+} from "@/components/form";
 import { closeModal, Modal } from "@/components/modal";
 import { useCreateUser } from "@/hooks/use-create-user";
 import { createUserSchema } from "./schemas";
@@ -16,9 +22,15 @@ export function CreateUserModal() {
       toast.error(error.response?.data.message || "Erro ao efetuar cadastro"),
   });
 
-  function handleSubmit(values: z.infer<typeof createUserSchema>) {
+  function handleSubmit(
+    values: z.infer<typeof createUserSchema>,
+    options: FormOnSubmitOptions
+  ) {
     const { name, username, password } = values;
-    createUser({ name, username, password });
+    createUser(
+      { name, username, password },
+      { onSuccess: () => options.reset() }
+    );
   }
 
   return (
