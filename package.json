@@ -6,6 +6,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
+    "pretest": "cd ./frontend && yarn && cd ../backend && yarn && cd ../",
     "test": "jest"
   },
   "devDependencies": {
