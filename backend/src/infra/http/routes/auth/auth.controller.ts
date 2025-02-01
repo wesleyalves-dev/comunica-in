@@ -1,14 +1,14 @@
 import type { Request, Response } from 'express'
 
-import { AuthService } from '../../../../core/auth/service/auth.service'
+import { SignInUseCase } from '../../../../core/auth/use-cases'
 import { config } from '../../../../config'
 
 export class AuthController {
-  private readonly authService = new AuthService()
+  private readonly signInUseCase = new SignInUseCase()
 
   async signIn(request: Request, response: Response): Promise<void> {
     const { username, password } = request.body
-    const { token } = await this.authService.signIn({ username, password })
+    const { token } = await this.signInUseCase.execute({ username, password })
     response
       .cookie(config.token.cookie, token, {
         httpOnly: true,
